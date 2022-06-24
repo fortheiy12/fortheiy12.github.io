@@ -1,0 +1,94 @@
+﻿<html>
+	<head>
+		<title> Pong </title>
+		<script src="https://simplycodingcourses.com/files/simplyjs/simply.js"></script>
+		<script>
+			
+			function start() {
+					sjs.open("target",500,400);
+
+					var ball = new sjs.Image("https://simplycoding.org/files/Game Design/Pong/Images/spike.png");
+					ball.type = "ball";
+					ball.center();
+					ball.friction = 0.001;
+					ball.pushUp(2);
+					ball.pushRight(3);
+					ball.bounce();
+
+				//Paddle 1
+					var paddle1 = new sjs.Image("Images/paddle.png");
+					paddle1.type = "paddle";
+					paddle1.centerH();
+					paddle1.setSize(100,20);
+
+				//Paddle 2
+					var paddle2 = new sjs.Image("Images/paddle2.png");
+					paddle2.type = "paddle";
+					paddle2.center().bottom();
+					paddle2.setSize(100,20);
+
+				var score = 0
+				var score_txt = new sjs.Text("Score: 0", 21, "orange");
+
+				sjs.keyDown(LEFT_KEY, function(){
+					paddle1.pushLeft();
+					paddle2.pushLeft();
+				});
+
+				sjs.keyDown(RIGHT_KEY, function(){
+					paddle1.pushRight();
+					paddle2.pushRight();
+				});
+
+				
+
+
+				sjs.onHit("ball","paddle", function(ball,paddle){
+					var soundEffect = new Audio('Music/pop.mp3');
+					sjs.bounceOff(ball,paddle);
+					var cangain = true;
+					if(cangain == true){
+						score = score + 1;
+							score_txt.setText("Score: "+score);
+							sjs.bounceOff(ball,paddle);
+							cangain = false;
+							soundEffect.play();
+							setTimeout(() => {
+								cangain = true
+							}, 10000);
+				}
+				});
+				sjs.onHit("ball",["top_screen","bottom_screen"], function(){
+					window.location = "gameover.html";
+				});
+			}			
+		</script>
+		<style>
+			body{
+				text-align: center;
+				background-color: lightblue;
+				font-family:cursive;
+			}
+			.playarea{
+				box-shadow:0 4px 8px 0 rgba(0,0,0,0.2);
+				transition: 0.4;
+				padding: 2px 16px;
+				margin:auto;
+				background:grey;
+			}
+			.shop{
+				margin-top: 10px;
+				box-shadow:0 4px 8px 0 rgba(0,0,0,0.2);
+				transition: 0.4;
+				padding: 10px;
+			}
+		</style>
+</head>
+	<body onload="start()">
+		<h1> Pong Game</h1>
+		<div id="target" class="playarea"></div>
+		<div class="shop">
+			<h1>Shop</h1>
+		</div>
+	</body>
+</html>
